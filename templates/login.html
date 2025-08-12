@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+</head>
+<body>
+<form action="{{url_for('main.login')}}" method="post">
+    {% with messages = get_flashed_messages() %}
+    {%  for message in get_flashed_messages() %}
+    {{ message }}<br>
+    {% endfor %}
+    {% endwith %}
+    <label for="email">Email</label><br>
+    <input name="email" id="email"><br>
+    <label for="password">Password</label><br>
+    <input name="password" id="password" type="password">
+    <input type="Submit" value="Submit">
+</form>
+</body>
+</html>

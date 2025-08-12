@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="{{url_for('main.create_task')}}" method="post">
+    <label for="title">Task Title</label><br>
+    <input name="title" id="title"><br>
+    <label for="description">Task Description</label><br>
+    <input name="description" id="description"><br>
+    <input type="Submit" value="Submit">
+</form>
+</body>
+</html>

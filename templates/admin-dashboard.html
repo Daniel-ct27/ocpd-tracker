@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dashboard</title>
+</head>
+<body>
+<h1>Welcome to your Admin Dashboard</h1>
+<a href="{{url_for('main.logout')}}">Logout</a>
+{% if tasks %}
+<div>
+    <h2>Tasks</h2>
+    {% for task in tasks %}
+    <div><h3>{{task.title}}</h3>
+        <p>{{task.description}}</p>
+        <a href="{{url_for('main.edit_task',task_id=task.id)}}">edit task</a> <a href="{{url_for('main.delete_task',task_id=task.id)}}">delete task</a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No scheduled tasks.</p>
+{% endif %}
+
+{% if events %}
+<div>
+    <h2>Events</h2>
+    {% for event in events %}
+    <div><h3>{{event.title}}</h3>
+        <p>{{event.description}}</p>
+        <a href="{{url_for('main.edit_event',event_id=event.id)}}">edit event</a> <a href="{{url_for('main.delete_event',event_id=event.id)}}">delete event</a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No scheduled events.</p>
+{% endif %}
+</body>
+</html>

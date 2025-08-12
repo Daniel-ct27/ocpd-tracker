@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dashboard</title>
+</head>
+<body>
+<h1>Welcome to your Student Dashboard</h1>
+<a href="{{url_for('main.logout')}}">Logout</a>
+{% if tasks %}
+<div>
+    <h2>Tasks</h2>
+    {% for task in tasks %}
+    <div><h3>{{task.title}}</h3>
+        <p>{{task.description}}</p></div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No upcoming tasks.</p>
+{% endif %}
+
+{% if events %}
+<div>
+    <h2>Upcoming Events</h2>
+    {% for event in events %}
+    <div><h3>{{event.title}}</h3>
+        <p>{{event.description}}</p></div>
+    {% endfor %}
+</div>
+{% else %}
+<h2>No upcoming events.</h2>
+{% endif %}
+</body>
+</html>
