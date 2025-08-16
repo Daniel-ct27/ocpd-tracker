@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form method="POST" action="{{ url_for('submit_attendance', event_id=event_id) }}">
+<form method="POST" action="{{ url_for('main.assignment_completion', task_id=task_id) }}">
     {% for user in attendance %}
         <label>
             <input type="checkbox" name="present" value="{{ user.id }}">
@@ -16,3 +16,4 @@
 </form>
 </body>
 </html>
+<!--What i want to do is create a form that when submitted affects the creates a new attendance record for each student in the records -->

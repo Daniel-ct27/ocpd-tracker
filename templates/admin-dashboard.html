@@ -15,7 +15,7 @@
     {% for task in tasks %}
     <div><h3>{{task.title}}</h3>
         <p>{{task.description}}</p>
-        <a href="{{url_for('main.edit_task',task_id=task.id)}}">edit task</a> <a href="{{url_for('main.delete_task',task_id=task.id)}}">delete task</a>
+        <a href="{{url_for('main.edit_task',task_id=task.id)}}">edit  task</a> <a href="{{url_for('main.delete_task',task_id=task.id)}}">delete task</a> <a href="{{url_for('main.assignment_completion',task_id=task.id)}}">Assignment Completion</a>
     </div>
     {% endfor %}
 </div>

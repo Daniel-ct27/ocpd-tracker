@@ -271,9 +271,19 @@ def delete_attendance(event_id,user_id):
     return redirect(url_for("main.view_attendance",event_id=event_id))
 
 
-@main_bp.route("/assignment-completion/<int:task_id>")
+@main_bp.route("/assignment-completion/<int:task_id>",methods=["GET","POST"])
 @login_required
 @admin_only
 def assignment_completion(task_id):
-    task = db.session.get(Assignment,task_id)
-    return render_template("attendance.html",attendance=task.assignment_completed)
+    if request.method == "POST":
+        user_ids = request.form.getlist("present")
+        for id in user_ids:
+            db.session.add(AssignmentCompletion(user_id=id,assignment_id=task_id))
+        db.session.commit()
+        return redirect(url_for("main.admin_dashboard"))
+    task = db.session.get(Assignment, task_id)
+    return render_template("assignment-completion.html",attendance=task.program.users,task_id=task_id)
+
+#TODO - for assignments i want to figure out a way for admins to select students who submitted  using a checkbox feature
+#TODO - Implement changes to the models to  include timestamps to all models
+
