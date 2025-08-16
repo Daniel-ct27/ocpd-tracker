@@ -210,3 +210,70 @@ def delete_event(event_id):
 @admin_only
 def edit_student():
     return
+
+
+#TODO - create a way for students to sign in to events
+#TODO - create a way for admins to view students who attended a particular event
+#TODO - create a way for admins to signify a student submitted an assignment
+
+""" So when the students sign in and view their dashboard they should vie the list of events if they click on one 
+it should take them to a new page where the see a description of the event with an option to sign in with a code
+ when they submit with the right code it should take them back to their dashboard but create a record in the attendance table
+"""
+@main_bp.route("/sign-in/<int:event_id>",methods=["GET","POST"])
+@login_required
+def sign_in(event_id):
+    event = db.session.get(Event, event_id)
+    if request.method == "POST":
+        if request.form.get("code") == event.code:
+            db.session.add(Attendance(user=current_user,event=event))
+            db.session.commit()
+            return redirect(url_for("main.student_dashboard"))
+        flash("Incorrect Code")
+    return render_template("sign-in-to-event.html",event=event)
+
+@main_bp.route("/view-attendance/<int:event_id>")
+@login_required
+@admin_only
+def view_attendance(event_id):
+    event = db.session.get(Event,event_id)
+    return render_template("attendance.html",attendance=event.attendance,event_id=event_id)
+
+@main_bp.route("/edit-attendance/<int:event_id>",methods=["GET","POST"])
+@login_required
+@admin_only
+def edit_attendance(event_id):
+    if request.method == "POST":
+        full_name = (request.form.get("fname") + " " + request.form.get("lname")).lower().strip()
+        event = db.session.get(Event, event_id)
+        user = (
+            db.session.execute(
+            db.select(User)
+            .join(User.program)
+            .join(Program.events)
+            .where(Event.id == event_id, db.func.lower(User.name) == full_name.lower())
+            ).scalar()
+        )
+        db.session.add(Attendance(user=user,event=event))
+        db.session.commit()
+        return redirect(url_for("main.view_attendance",event_id=event_id))
+    return render_template("edit-attendance.html",event_id=event_id)
+
+
+@main_bp.route("/delete-attendance/<int:event_id>/<int:user_id>")
+@login_required
+@admin_only
+def delete_attendance(event_id,user_id):
+    attendance = db.session.get(Attendance,(event_id,user_id))
+    if attendance:
+        db.session.delete(attendance)
+        db.session.commit()
+    return redirect(url_for("main.view_attendance",event_id=event_id))
+
+
+@main_bp.route("/assignment-completion/<int:task_id>")
+@login_required
+@admin_only
+def assignment_completion(task_id):
+    task = db.session.get(Assignment,task_id)
+    return render_template("attendance.html",attendance=task.assignment_completed)

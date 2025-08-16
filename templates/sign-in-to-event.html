@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="{{url_for('main.sign_in',event_id=event.id)}}">
+    {%with messages = get_flashed_messages()%}
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+    {% endwith %}
+<div><h3><label for="code">Enter The Program Code</label></h3><br>
+    <input name="code" id="code" type="password">
+<input type="submit"></div></form>
+
+</body>
+</html>

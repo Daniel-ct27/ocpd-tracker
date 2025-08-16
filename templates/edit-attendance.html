@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="{{url_for('main.edit_attendance',event_id=event_id)}}" method="post">
+    <label for="fname">First Name</label><br>
+    <input name="fname" id="fname"><br>
+    <label for="lname">Last Name</label><br>
+    <input name="lname" id="lname"><br>
+    <input type="Submit" value="Submit">
+</form>
+</body>
+</html>

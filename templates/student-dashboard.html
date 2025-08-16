@@ -23,7 +23,7 @@
 <div>
     <h2>Upcoming Events</h2>
     {% for event in events %}
-    <div><h3>{{event.title}}</h3>
+    <div><a href="{{url_for('main.sign_in',event_id=event.id)}}"><h3>{{event.title}}</h3></a>
         <p>{{event.description}}</p></div>
     {% endfor %}
 </div>

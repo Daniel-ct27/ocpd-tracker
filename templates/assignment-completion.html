@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="POST" action="{{ url_for('submit_attendance', event_id=event_id) }}">
+    {% for user in attendance %}
+        <label>
+            <input type="checkbox" name="present" value="{{ user.id }}">
+            {{ user.name }}
+        </label><br>
+    {% endfor %}
+    <button type="submit">Submit Attendance</button>
+</form>
+</body>
+</html>

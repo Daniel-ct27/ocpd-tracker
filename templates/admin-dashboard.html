@@ -7,6 +7,8 @@
 <body>
 <h1>Welcome to your Admin Dashboard</h1>
 <a href="{{url_for('main.logout')}}">Logout</a>
+<a href="{{url_for('main.create_task')}}">Create Task</a>
+<a href="{{url_for('main.create_event')}}">Create Event</a>
 {% if tasks %}
 <div>
     <h2>Tasks</h2>
@@ -27,7 +29,7 @@
     {% for event in events %}
     <div><h3>{{event.title}}</h3>
         <p>{{event.description}}</p>
-        <a href="{{url_for('main.edit_event',event_id=event.id)}}">edit event</a> <a href="{{url_for('main.delete_event',event_id=event.id)}}">delete event</a>
+        <a href="{{url_for('main.edit_event',event_id=event.id)}}">edit event</a> <a href="{{url_for('main.delete_event',event_id=event.id)}}">delete event</a> <a href="{{url_for('main.view_attendance',event_id=event.id)}}">attendance</a>
     </div>
     {% endfor %}
 </div>

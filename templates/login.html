@@ -6,9 +6,9 @@
 </head>
 <body>
 <form action="{{url_for('main.login')}}" method="post">
-    {% with messages = get_flashed_messages() %}
-    {%  for message in get_flashed_messages() %}
-    {{ message }}<br>
+   {%with messages = get_flashed_messages()%}
+    {% for message in messages %}
+    {{ message }}
     {% endfor %}
     {% endwith %}
     <label for="email">Email</label><br>
