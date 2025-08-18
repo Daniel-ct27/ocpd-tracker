@@ -7,7 +7,7 @@
 <body>
 <a href="{{url_for('main.edit_attendance',event_id=event_id)}}">Add record</a>
 {% for record in attendance %}
-<p>{{ record.user.name }}</p> <a href="{{url_for('main.delete_attendance',event_id = record.event.id,user_id = record.user.id)}}">Delete record</a>
+<p>{{ record.user.name }}</p> <a href="{{url_for('main.delete_attendance',event_id = record.event.id,user_id = record.user.school_id)}}">Delete record</a>
 {% endfor %}
 </body>
 </html>

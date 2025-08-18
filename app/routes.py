@@ -3,16 +3,28 @@ from flask_login import login_required
 from .decorators import admin_only
 from .models import Program, Event, Assignment, AssignmentCompletion, User, Attendance,ProgramAdmin, program_model
 from flask import Flask, render_template, request, redirect, url_for, flash, abort
-from . import db
+from .extension import db
+from flask import current_app
+from .models import Event, Assignment
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_required, current_user, logout_user,  login_user
+from datetime import datetime,date, time
 
 main_bp = Blueprint(
     "main",
     __name__,
     template_folder="../templates"  # relative to this file's location
 )
-
+def get_next_events(program_id, limit=5):
+    with current_app.app_context():
+        start_of_today = datetime.combine(date.today(), time.min)
+        return (
+            Event.query
+            .filter(Event.program_id == program_id, Event.date >= start_of_today)
+            .order_by(Event.date.asc())
+            .limit(limit)
+            .all()
+        )
 @main_bp.route("/")
 def home():
     return render_template("home.html")
@@ -26,7 +38,7 @@ def login():
         if user:
             if check_password_hash(user.password_hash, password):
                 login_user(user)
-                if not db.session.get(ProgramAdmin,(user.program_id,user.id)):
+                if not db.session.get(ProgramAdmin,(user.program_id,user.school_id)):
                     return redirect(url_for("main.student_dashboard"))
                 return redirect(url_for("main.admin_dashboard"))
 
@@ -37,15 +49,16 @@ def login():
 @main_bp.route("/register", methods=["GET","POST"])
 def register_student():
     if request.method == "POST":
+        school_id = request.form.get("school_id")
         name = request.form.get("fname") + " " + request.form.get("lname")
         email = request.form.get("email")
+        program_id = program_model.get(request.form.get("program").upper().strip())
         password = request.form.get("password")
-        program_id =  program_model.get(request.form.get("program").upper())
         confirmpassword = request.form.get("confirm-password")
         if password == confirmpassword:
             hashed_password = generate_password_hash(password,method="scrypt",salt_length=8)
             program = db.session.get(Program, program_id)
-            new_user = User(name=name, email=email, password_hash=hashed_password, program=program)
+            new_user = User(school_id = school_id,name=name,email=email,role="Student",password_hash=hashed_password,program=program)
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user)
@@ -57,15 +70,17 @@ def register_student():
 @main_bp.route("/register-admin", methods=["GET","POST"])
 def register_admin():
     if request.method == "POST":
+        school_id = request.form.get("school_id")
         name = request.form.get("fname") + " " + request.form.get("lname")
         email = request.form.get("email")
-        password = request.form.get("password")
         program_id =  program_model.get(request.form.get("program").upper().strip())
+        role = request.form.get("role")
+        password = request.form.get("password")
         confirmpassword = request.form.get("confirm-password")
         if password == confirmpassword:
             hashed_password = generate_password_hash(password,method="scrypt",salt_length=8)
             program = db.session.get(Program, program_id)
-            new_user = User(name=name,email=email,password_hash=hashed_password,program=program)
+            new_user = User(school_id = school_id,name=name,email=email,role=role,password_hash=hashed_password,program=program)
             new_program_admin = ProgramAdmin(program=program,user=new_user)
             db.session.add_all([new_user,new_program_admin])
             db.session.commit()
@@ -85,7 +100,7 @@ def logout():
 @login_required
 def student_dashboard():
     tasks = current_user.program.assignments
-    events = current_user.program.events
+    events = get_next_events(current_user.program_id)
     return render_template("student-dashboard.html",tasks=tasks, events=events)
 
 @main_bp.route("/admin")
@@ -97,8 +112,6 @@ def admin_dashboard():
     return render_template("admin-dashboard.html",tasks=tasks,events=events)
 
 @main_bp.route("/add-program",methods=["GET","POST"])
-@login_required
-@admin_only
 def create_program():
     if request.method == "POST":
         program_name = request.form.get("program")
@@ -118,7 +131,9 @@ def create_task():
         program = db.session.get(Program, current_user.program_id)
         title  = request.form.get("title")
         description = request.form.get("description")
-        new_task = Assignment(title=title,description=description,program=program)
+        deadline_str = request.form.get("deadline")
+        deadline = datetime.strptime(deadline_str, "%Y-%m-%dT%H:%M")
+        new_task = Assignment(title=title,description=description,program=program,deadline=deadline)
         db.session.add(new_task)
         db.session.commit()
         return redirect(url_for("main.admin_dashboard"))
@@ -165,7 +180,10 @@ def create_event():
         title = request.form.get("title")
         code = request.form.get("code")
         description = request.form.get("description")
-        new_event = Event(title=title, code=code,description=description, program=program)
+        location = request.form.get("location")
+        date_str = request.form.get("date")
+        date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M")
+        new_event = Event(title=title, code=code,description=description, program=program, location=location,date=date)
         db.session.add(new_event)
         db.session.commit()
         return redirect(url_for("main.admin_dashboard"))

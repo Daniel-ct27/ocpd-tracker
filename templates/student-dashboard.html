@@ -11,20 +11,26 @@
 <div>
     <h2>Tasks</h2>
     {% for task in tasks %}
-    <div><h3>{{task.title}}</h3>
-        <p>{{task.description}}</p></div>
+    <div>
+        <div><h3>{{task.title}}</h3>
+            <p>Deadline: {{task.deadline.strftime("%Y-%m-%d %H:%M") }}</p></div>
+<!--make  an API call to get this time as a string-->
+        <p>{{task.description}}</p>
+    </div>
     {% endfor %}
 </div>
 {% else %}
-<p>No upcoming tasks.</p>
+<h2>No upcoming Tasks.</h2>
 {% endif %}
 
 {% if events %}
 <div>
     <h2>Upcoming Events</h2>
     {% for event in events %}
-    <div><a href="{{url_for('main.sign_in',event_id=event.id)}}"><h3>{{event.title}}</h3></a>
-        <p>{{event.description}}</p></div>
+    <div><div><a href="{{url_for('main.sign_in',event_id=event.id)}}"><h3>{{event.title}}</h3></a><p>Date: {{event.date.strftime("%Y-%m-%d")}}</p><p>Time: {{event.date.strftime("%H:%M")}}</p></div>
+        <p>{{event.description}}</p>
+
+    </div>
     {% endfor %}
 </div>
 {% else %}
@@ -32,3 +38,4 @@
 {% endif %}
 </body>
 </html>
+

@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import Integer, String, ForeignKey,DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_login import UserMixin
-from . import db
+from .extension import db
 
 """1) Can user be implemented using the users stored  school id guaranteed all user_ids are different
    2) Every Event needs a venue and a time, should be a datetime object to allow me rank
@@ -47,6 +47,10 @@ class User(db.Model,UserMixin):
     assignment_completed = relationship("AssignmentCompletion",back_populates="user")
     admin = relationship("ProgramAdmin", back_populates="user")
 
+    def get_id(self):
+        # Flask-Login calls this when storing the user in the session
+        return str(self.school_id)
+
 class Event(db.Model):
     """
     An event or meeting scholars are to attend, i
@@ -87,7 +91,7 @@ class ProgramAdmin(db.Model):
     """A new model that acts as a linking table between Users and Programs. It should contain fields user_id and program_id. \
     The first a foreign key to the user table the second a foreign key to the program table. Each record here shows the user is an admin for a specified  program"""
     program_id = mapped_column(Integer, ForeignKey("programs.id"),primary_key=True)
-    user_id = mapped_column(String(100), ForeignKey("users.id"),primary_key=True)
+    user_id = mapped_column(String(100), ForeignKey("users.school_id"),primary_key=True)
 
     program = relationship("Program", back_populates="admin")
     user = relationship("User", back_populates="admin")
@@ -99,7 +103,7 @@ class Attendance(db.Model):
     """
     #Creating composite keys for the many to many relationship
     event_id = mapped_column(Integer,ForeignKey("events.id"),primary_key=True)
-    user_id = mapped_column(String(100), ForeignKey("users.id"), primary_key=True)
+    user_id = mapped_column(String(100), ForeignKey("users.school_id"), primary_key=True)
 
     #creating relationships
     event = relationship("Event",back_populates="attendance")
@@ -113,7 +117,7 @@ class AssignmentCompletion(db.Model):
      """
 
     assignment_id = mapped_column(Integer, ForeignKey("assignments.id"), primary_key=True)
-    user_id = mapped_column(String(100), ForeignKey("users.id"), primary_key=True)
+    user_id = mapped_column(String(100), ForeignKey("users.school_id"), primary_key=True)
 
     # creating relationships
     assignment = relationship("Assignment", back_populates="assignment_completed")

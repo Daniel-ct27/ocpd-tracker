@@ -13,28 +13,35 @@
 <div>
     <h2>Tasks</h2>
     {% for task in tasks %}
-    <div><h3>{{task.title}}</h3>
+    <div>
+        <div><h3>{{task.title}}</h3>
+            <p>Deadline: {{task.deadline.strftime("%Y-%m-%d %H:%M") }}</p></div>
+<!--make  an API call too get this time as a string-->
         <p>{{task.description}}</p>
-        <a href="{{url_for('main.edit_task',task_id=task.id)}}">edit  task</a> <a href="{{url_for('main.delete_task',task_id=task.id)}}">delete task</a> <a href="{{url_for('main.assignment_completion',task_id=task.id)}}">Assignment Completion</a>
+        <a href="{{url_for('main.edit_task',task_id=task.id)}}">edit</a> <a
+            href="{{url_for('main.delete_task',task_id=task.id)}}">delete</a> <a
+            href="{{url_for('main.assignment_completion',task_id=task.id)}}">completion</a>
     </div>
     {% endfor %}
 </div>
 {% else %}
-<p>No scheduled tasks.</p>
+<h2>No Scheduled Tasks.</h2>
 {% endif %}
 
 {% if events %}
 <div>
     <h2>Events</h2>
     {% for event in events %}
-    <div><h3>{{event.title}}</h3>
+    <div><div><h3>{{event.title}}</h3> <p>Date: {{event.date.strftime("%Y-%m-%d")}}</p><p>Time: {{event.date.strftime("%H:%M")}}</p></div>
         <p>{{event.description}}</p>
-        <a href="{{url_for('main.edit_event',event_id=event.id)}}">edit event</a> <a href="{{url_for('main.delete_event',event_id=event.id)}}">delete event</a> <a href="{{url_for('main.view_attendance',event_id=event.id)}}">attendance</a>
+        <a href="{{url_for('main.edit_event',event_id=event.id)}}">edit</a> <a
+                href="{{url_for('main.delete_event',event_id=event.id)}}">delete</a> <a
+                href="{{url_for('main.view_attendance',event_id=event.id)}}">attendance</a>
     </div>
     {% endfor %}
 </div>
 {% else %}
-<p>No scheduled events.</p>
+<h2>No Scheduled Events.</h2>
 {% endif %}
 </body>
 </html>

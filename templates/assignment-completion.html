@@ -7,10 +7,12 @@
 <body>
 <form method="POST" action="{{ url_for('main.assignment_completion', task_id=task_id) }}">
     {% for user in attendance %}
+    {% if user.role == "Student" %}
         <label>
             <input type="checkbox" name="present" value="{{ user.id }}">
             {{ user.name }}
         </label><br>
+    {% endif %}
     {% endfor %}
     <button type="submit">Submit Attendance</button>
 </form>
