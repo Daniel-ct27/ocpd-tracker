@@ -1,47 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>dashboard</title>
-</head>
-<body>
-<h1>Welcome to your Admin Dashboard</h1>
-<a href="{{url_for('main.logout')}}">Logout</a>
-<a href="{{url_for('main.create_task')}}">Create Task</a>
-<a href="{{url_for('main.create_event')}}">Create Event</a>
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - OCPD Learning Platform{% endblock %}
+
+{% block header %}Admin Dashboard{% endblock %}
+
+{% block navigation %}
+<div class="nav-links">
+    <a href="{{url_for('main.logout')}}" class="nav-link">Logout</a>
+    <a href="{{url_for('main.create_task')}}" class="nav-link">Create Task</a>
+    <a href="{{url_for('main.create_event')}}" class="nav-link">Create Event</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<h2 class="section-title">Welcome to your Admin Dashboard</h2>
+
 {% if tasks %}
-<div>
-    <h2>Tasks</h2>
-    {% for task in tasks %}
-    <div>
-        <div><h3>{{task.title}}</h3>
-            <p>Deadline: {{task.deadline.strftime("%Y-%m-%d %H:%M") }}</p></div>
-<!--make  an API call too get this time as a string-->
-        <p>{{task.description}}</p>
-        <a href="{{url_for('main.edit_task',task_id=task.id)}}">edit</a> <a
-            href="{{url_for('main.delete_task',task_id=task.id)}}">delete</a> <a
-            href="{{url_for('main.assignment_completion',task_id=task.id)}}">completion</a>
+<div class="mb-4">
+    <h3 class="section-title" style="font-size: 1.5rem; margin-bottom: 20px;">📋 Manage Tasks</h3>
+    <div class="grid">
+        {% for task in tasks %}
+        <div class="card">
+            <h3>{{task.title}}</h3>
+            <p><strong>Deadline:</strong> {{task.deadline.strftime("%Y-%m-%d %H:%M") }}</p>
+            <p>{{task.description}}</p>
+            <div class="button-group">
+                <a href="{{url_for('main.edit_task',task_id=task.id)}}" class="btn btn-secondary">Edit</a>
+                <a href="{{url_for('main.delete_task',task_id=task.id)}}" class="btn btn-secondary">Delete</a>
+                <a href="{{url_for('main.assignment_completion',task_id=task.id)}}" class="btn">View Completion</a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% else %}
-<h2>No Scheduled Tasks.</h2>
+<div class="card text-center">
+    <h3>No Scheduled Tasks</h3>
+    <p>Create your first task to get started!</p>
+</div>
 {% endif %}
 
 {% if events %}
-<div>
-    <h2>Events</h2>
-    {% for event in events %}
-    <div><div><h3>{{event.title}}</h3> <p>Date: {{event.date.strftime("%Y-%m-%d")}}</p><p>Time: {{event.date.strftime("%H:%M")}}</p></div>
-        <p>{{event.description}}</p>
-        <a href="{{url_for('main.edit_event',event_id=event.id)}}">edit</a> <a
-                href="{{url_for('main.delete_event',event_id=event.id)}}">delete</a> <a
-                href="{{url_for('main.view_attendance',event_id=event.id)}}">attendance</a>
+<div class="mb-4">
+    <h3 class="section-title" style="font-size: 1.5rem; margin-bottom: 20px;">📅 Manage Events</h3>
+    <div class="grid">
+        {% for event in events %}
+        <div class="card">
+            <h3>{{event.title}}</h3>
+            <p><strong>Date:</strong> {{event.date.strftime("%Y-%m-%d")}}</p>
+            <p><strong>Time:</strong> {{event.date.strftime("%H:%M")}}</p>
+            <p>{{event.description}}</p>
+            <div class="button-group">
+                <a href="{{url_for('main.edit_event',event_id=event.id)}}" class="btn btn-secondary">Edit</a>
+                <a href="{{url_for('main.delete_event',event_id=event.id)}}" class="btn btn-secondary">Delete</a>
+                <a href="{{url_for('main.view_attendance',event_id=event.id)}}" class="btn">View Attendance</a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% else %}
-<h2>No Scheduled Events.</h2>
+<div class="card text-center">
+    <h3>No Scheduled Events</h3>
+    <p>Create your first event to get started!</p>
+</div>
 {% endif %}
-</body>
-</html>
+{% endblock %}

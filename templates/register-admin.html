@@ -1,36 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register Admin</title>
+{% extends "base.html" %}
 
-</head>
-<body>
-<form action="{{url_for('main.register_admin')}}" method="post">
-    {% with messages = get_flashed_messages() %}
-    {%  for message in get_flashed_messages() %}
-    {{ message }}<br>
-    {% endfor %}
-    {% endwith %}
-    <label for="fname">First Name</label><br>
-    <input name="fname" id="fname"><br>
-    <label for="lname">Last Name</label><br>
-    <input name="lname" id="lname"><br>
-    <label for="program">Program</label><br>
-    <input name="program" id="program"><br>
-     <label for="school-id">School or Staff ID</label><br>
-    <input name="school_id" id="school-id"><br>
-    <label for="role">Role</label><br>
-    <input name="role" id="role"><br>
-<!--    In future there should be a dropdown for this but for now we will manage-->
-    <label for="email">Email</label><br>
-    <input name="email" id="email"><br>
-    <label for="password">Password</label><br>
-    <input name="password" id="password" type="password"><br>
-    <label for="confirm-password">Confirm Password</label><br>
-    <input name="confirm-password" id="confirm-password" type="password"><br>
-    <input type="Submit" value="Submit">
-<!--There should be a way to send verification emails from this point-->
-</form>
-</body>
-</html>
+{% block title %}Register Admin - OCPD Learning Platform{% endblock %}
+
+{% block header %}Create Admin Account{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form action="{{url_for('main.register_admin')}}" method="post">
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+            <div class="alert alert-error">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        
+        <div class="form-group">
+            <label for="fname" class="form-label">First Name</label>
+            <input name="fname" id="fname" class="form-input" placeholder="Enter your first name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="lname" class="form-label">Last Name</label>
+            <input name="lname" id="lname" class="form-input" placeholder="Enter your last name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="program" class="form-label">Program</label>
+            <input name="program" id="program" class="form-input" placeholder="Enter your program" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="school-id" class="form-label">School or Staff ID</label>
+            <input name="school_id" id="school-id" class="form-input" placeholder="Enter your ID" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="role" class="form-label">Role</label>
+            <input name="role" id="role" class="form-input" placeholder="Enter your role" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input name="email" id="email" type="email" class="form-input" placeholder="Enter your email address" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input name="password" id="password" type="password" class="form-input" placeholder="Create a strong password" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="confirm-password" class="form-label">Confirm Password</label>
+            <input name="confirm-password" id="confirm-password" type="password" class="form-input" placeholder="Confirm your password" required>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn">Create Admin Account</button>
+        </div>
+    </form>
+    
+    <div class="text-center mt-4">
+        <p>Already have an account? <a href="{{url_for('main.login')}}" class="nav-link">Sign in here</a></p>
+    </div>
+</div>
+{% endblock %}

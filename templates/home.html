@@ -1,14 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>OCPD Learning Platform</title>
-</head>
-<body>
-<h1>Welcome</h1>
-<a href="{{url_for('main.login')}}">Login</a>
-<a href="{{url_for('main.logout')}}">Logout</a>
-<a href="{{url_for('main.register_student')}}">Register</a>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Home - OCPD Learning Platform{% endblock %}
+
+{% block header %}Welcome to OCPD Learning Platform{% endblock %}
+
+{% block navigation %}
+<div class="nav-links">
+    <a href="{{url_for('main.login')}}" class="nav-link">Login</a>
+    <a href="{{url_for('main.register_student')}}" class="nav-link">Register</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2 class="section-title">Get Started with Your Learning Journey</h2>
+    <p class="mb-4">Welcome to the OCPD Learning Platform where you can track your professional development activities, manage tasks, and participate in events.</p>
+    
+    <div class="grid">
+        <div class="card">
+            <h3>📚 Learning Management</h3>
+            <p>Access your assigned tasks and track your progress through various learning activities.</p>
+        </div>
+        
+        <div class="card">
+            <h3>📅 Event Participation</h3>
+            <p>Sign up for upcoming events and workshops to enhance your professional skills.</p>
+        </div>
+        
+        <div class="card">
+            <h3>📊 Progress Tracking</h3>
+            <p>Monitor your completion rates and maintain records of your professional development.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

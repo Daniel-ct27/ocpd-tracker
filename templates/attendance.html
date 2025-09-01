@@ -1,13 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<a href="{{url_for('main.edit_attendance',event_id=event_id)}}">Add record</a>
-{% for record in attendance %}
-<p>{{ record.user.name }}</p> <a href="{{url_for('main.delete_attendance',event_id = record.event.id,user_id = record.user.school_id)}}">Delete record</a>
-{% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Event Attendance - OCPD Learning Platform{% endblock %}
+
+{% block header %}Event Attendance{% endblock %}
+
+{% block navigation %}
+<div class="nav-links">
+    <a href="{{url_for('main.admin_dashboard')}}" class="nav-link">Back to Dashboard</a>
+    <a href="{{url_for('main.logout')}}" class="nav-link">Logout</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <a href="{{url_for('main.edit_attendance',event_id=event_id)}}" class="btn">Add Attendance Record</a>
+</div>
+
+{% if attendance %}
+<div class="mb-4">
+    <h3 class="section-title" style="font-size: 1.5rem; margin-bottom: 20px;">📊 Attendance Records</h3>
+    <div class="grid">
+        {% for record in attendance %}
+        <div class="card">
+            <h3>{{ record.user.name }}</h3>
+            <p><strong>School ID:</strong> {{ record.user.school_id }}</p>
+            <p><strong>Program:</strong> {{ record.user.program }}</p>
+            <div class="mt-4">
+                <a href="{{url_for('main.delete_attendance',event_id = record.event.id,user_id = record.user.school_id)}}" class="btn btn-secondary">Delete Record</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="card text-center">
+    <h3>No Attendance Records</h3>
+    <p>No students have signed up for this event yet.</p>
+</div>
+{% endif %}
+{% endblock %}

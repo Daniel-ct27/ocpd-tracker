@@ -7,7 +7,7 @@ from .models import User, ProgramAdmin,Program, Event, Assignment, AssignmentCom
 login_manager = LoginManager()
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='../static')
     app.config['SECRET_KEY'] = 'supersecret'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tracker.db'
 

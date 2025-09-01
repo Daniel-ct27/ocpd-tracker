@@ -1,18 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form action="{{url_for('main.create_task')}}" method="post">
-    <label for="title">Task Title</label><br>
-    <input name="title" id="title"><br>
-    <label for="description">Task Description</label><br>
-    <input name="description" id="description"><br>
-    <label for="deadline">Deadline</label><br>
-    <input type="datetime-local" name="deadline" id="deadline"><br>
-    <input type="Submit" value="Submit">
-</form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Create Task - OCPD Learning Platform{% endblock %}
+
+{% block header %}Create New Task{% endblock %}
+
+{% block navigation %}
+<div class="nav-links">
+    <a href="{{url_for('main.admin_dashboard')}}" class="nav-link">Back to Dashboard</a>
+    <a href="{{url_for('main.logout')}}" class="nav-link">Logout</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form action="{{url_for('main.create_task')}}" method="post">
+        <div class="form-group">
+            <label for="title" class="form-label">Task Title</label>
+            <input name="title" id="title" class="form-input" placeholder="Enter task title" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description" class="form-label">Task Description</label>
+            <textarea name="description" id="description" class="form-input" placeholder="Enter task description" rows="4" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="deadline" class="form-label">Deadline</label>
+            <input type="datetime-local" name="deadline" id="deadline" class="form-input" required>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn">Create Task</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,19 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form method="post" action="{{url_for('main.sign_in',event_id=event.id)}}">
-    {%with messages = get_flashed_messages()%}
-    {% for message in messages %}
-    {{ message }}
-    {% endfor %}
-    {% endwith %}
-<div><h3><label for="code">Enter The Program Code</label></h3><br>
-    <input name="code" id="code" type="password">
-<input type="submit"></div></form>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Sign In to Event - OCPD Learning Platform{% endblock %}
+
+{% block header %}Sign In to Event{% endblock %}
+
+{% block navigation %}
+<div class="nav-links">
+    <a href="{{url_for('main.student_dashboard')}}" class="nav-link">Back to Dashboard</a>
+    <a href="{{url_for('main.logout')}}" class="nav-link">Logout</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card text-center mb-4">
+        <h3>{{ event.title }}</h3>
+        <p><strong>Date:</strong> {{ event.date.strftime("%Y-%m-%d") }}</p>
+        <p><strong>Time:</strong> {{ event.date.strftime("%H:%M") }}</p>
+        <p><strong>Location:</strong> {{ event.location }}</p>
+        <p>{{ event.description }}</p>
+    </div>
+    
+    <form method="post" action="{{url_for('main.sign_in',event_id=event.id)}}">
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+            <div class="alert alert-error">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        
+        <div class="form-group">
+            <label for="code" class="form-label">Enter The Event Code</label>
+            <input name="code" id="code" type="password" class="form-input" placeholder="Enter event code" required>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn">Sign In to Event</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

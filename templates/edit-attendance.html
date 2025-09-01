@@ -1,16 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form action="{{url_for('main.edit_attendance',event_id=event_id)}}" method="post">
-    <label for="fname">First Name</label><br>
-    <input name="fname" id="fname"><br>
-    <label for="lname">Last Name</label><br>
-    <input name="lname" id="lname"><br>
-    <input type="Submit" value="Submit">
-</form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Add Attendance Record - OCPD Learning Platform{% endblock %}
+
+{% block header %}Add Attendance Record{% endblock %}
+
+{% block navigation %}
+<div class="nav-links">
+    <a href="{{url_for('main.view_attendance',event_id=event_id)}}" class="nav-link">Back to Attendance</a>
+    <a href="{{url_for('main.admin_dashboard')}}" class="nav-link">Back to Dashboard</a>
+    <a href="{{url_for('main.logout')}}" class="nav-link">Logout</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form action="{{url_for('main.edit_attendance',event_id=event_id)}}" method="post">
+        <div class="form-group">
+            <label for="fname" class="form-label">First Name</label>
+            <input name="fname" id="fname" class="form-input" placeholder="Enter first name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="lname" class="form-label">Last Name</label>
+            <input name="lname" id="lname" class="form-input" placeholder="Enter last name" required>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn">Add Record</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

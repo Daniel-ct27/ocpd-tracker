@@ -1,10 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Edit Event - OCPD Learning Platform{% endblock %}
+
+{% block header %}Edit Event{% endblock %}
+
+{% block navigation %}
+<div class="nav-links">
+    <a href="{{url_for('main.admin_dashboard')}}" class="nav-link">Back to Dashboard</a>
+    <a href="{{url_for('main.logout')}}" class="nav-link">Logout</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form action="{{url_for('main.edit_event', event_id=event.id)}}" method="post">
+        <div class="form-group">
+            <label for="title" class="form-label">Event Title</label>
+            <input name="title" id="title" class="form-input" value="{{ event.title }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="code" class="form-label">Event Code</label>
+            <input name="code" id="code" class="form-input" value="{{ event.code }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description" class="form-label">Event Description</label>
+            <textarea name="description" id="description" class="form-input" rows="4" required>{{ event.description }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="location" class="form-label">Location</label>
+            <input name="location" id="location" class="form-input" value="{{ event.location }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="date" class="form-label">Date & Time</label>
+            <input type="datetime-local" name="date" id="date" class="form-input" value="{{ event.date.strftime('%Y-%m-%dT%H:%M') }}" required>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn">Update Event</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

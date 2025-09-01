@@ -1,21 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form method="POST" action="{{ url_for('main.assignment_completion', task_id=task_id) }}">
-    {% for user in attendance %}
-    {% if user.role == "Student" %}
-        <label>
-            <input type="checkbox" name="present" value="{{ user.id }}">
-            {{ user.name }}
-        </label><br>
-    {% endif %}
-    {% endfor %}
-    <button type="submit">Submit Attendance</button>
-</form>
-</body>
-</html>
-<!--What i want to do is create a form that when submitted affects the creates a new attendance record for each student in the records -->
+{% extends "base.html" %}
+
+{% block title %}Assignment Completion - OCPD Learning Platform{% endblock %}
+
+{% block header %}Assignment Completion Tracking{% endblock %}
+
+{% block navigation %}
+<div class="nav-links">
+    <a href="{{url_for('main.admin_dashboard')}}" class="nav-link">Back to Dashboard</a>
+    <a href="{{url_for('main.logout')}}" class="nav-link">Logout</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h3 class="section-title" style="font-size: 1.5rem; margin-bottom: 20px;">Mark Students Submissions</h3>
+    
+    <form method="POST" action="{{ url_for('main.assignment_completion', task_id=task_id) }}">
+        <div class="mb-4">
+            <p>Select the students who submitted this assignment:</p>
+        </div>
+        
+        {% for user in attendance %}
+            {% if user.role == "Student" %}
+            <div class="form-group" style="display: flex; align-items: center; padding: 15px; background: rgba(255, 255, 255, 0.8); border-radius: 10px; margin-bottom: 10px;">
+                <input type="checkbox" name="present" value="{{ user.id }}" id="user_{{ user.id }}" style="margin-right: 15px; transform: scale(1.2);">
+                <label for="user_{{ user.id }}" style="margin: 0; cursor: pointer; font-weight: 500;">
+                    {{ user.name }} ({{ user.school_id }})
+                </label>
+            </div>
+            {% endif %}
+        {% endfor %}
+        
+        <div class="text-center mt-4">
+            <button type="submit" class="btn">Submit Attendance</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

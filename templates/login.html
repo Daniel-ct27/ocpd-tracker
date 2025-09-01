@@ -1,21 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>register</title>
-</head>
-<body>
-<form action="{{url_for('main.login')}}" method="post">
-   {%with messages = get_flashed_messages()%}
-    {% for message in messages %}
-    {{ message }}
-    {% endfor %}
-    {% endwith %}
-    <label for="email">Email</label><br>
-    <input name="email" id="email"><br>
-    <label for="password">Password</label><br>
-    <input name="password" id="password" type="password">
-    <input type="Submit" value="Submit">
-</form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Login - OCPD Learning Platform{% endblock %}
+
+{% block header %}Sign In to Your Account{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form action="{{url_for('main.login')}}" method="post">
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+            <div class="alert alert-error">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        
+        <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input name="email" id="email" type="email" class="form-input" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input name="password" id="password" type="password" class="form-input" placeholder="Enter your password" required>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn">Sign In</button>
+        </div>
+    </form>
+    
+    <div class="text-center mt-4">
+        <p>Don't have an account? <a href="{{url_for('main.register_student')}}" class="nav-link">Register Here</a> Or <a href="{{url_for('main.home')}}" class="nav-link">Homepage</a></p>
+    </div>
+</div>
+{% endblock %}

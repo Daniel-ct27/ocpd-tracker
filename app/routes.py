@@ -144,6 +144,11 @@ def create_task():
 @login_required
 @admin_only
 def edit_task(task_id):
+    task = db.session.get(Assignment, task_id)
+    if not task:
+        flash("Task not found")
+        return redirect(url_for("main.admin_dashboard"))
+        
     if request.method == "POST":
         #make sure the names of fields in the form match the attribute names of the Assignment class
         form_data = {key:value for key,value in request.form.to_dict().items() if value}
@@ -156,7 +161,7 @@ def edit_task(task_id):
         db.session.commit()
         flash("Changes Have Been Made")
         return redirect(url_for("main.admin_dashboard"))
-    return render_template("edit-task.html")
+    return render_template("edit-task.html", task=task)
 
 
 @main_bp.route("/delete_task/<int:task_id>")
@@ -196,9 +201,15 @@ def create_event():
 @admin_only
 def edit_event(event_id):
     # edits existing events for a specific program
+    event = db.session.get(Event, event_id)
+    if not event:
+        flash("Event not found")
+        return redirect(url_for("main.admin_dashboard"))
+        
     if request.method == "POST":
-        # make sure the names of fields in the form match the attribute names of the Assignment class
+        # make sure the names of fields in the form match the attribute names of the Event class
         form_data = {key: value for key, value in request.form.to_dict().items() if value}
+        form_data["date"] = datetime.strptime(form_data["date"], "%Y-%m-%dT%H:%M")
         stmt = (
             db.update(Event)
             .where(Event.id == event_id)
@@ -209,7 +220,7 @@ def edit_event(event_id):
         flash("Changes Have Been Made")
         return redirect(url_for("main.admin_dashboard"))
 
-    return render_template("edit-event.html")
+    return render_template("edit-event.html", event=event)
 
 
 @main_bp.route("/delete_event/<int:event_id>")
